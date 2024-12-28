@@ -20,8 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MonoTodoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    MonoTodoApp(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
