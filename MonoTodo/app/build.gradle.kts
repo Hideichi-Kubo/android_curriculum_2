@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.monotodo"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.monotodo"
@@ -74,6 +74,10 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
