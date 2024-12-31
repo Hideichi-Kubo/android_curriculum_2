@@ -5,4 +5,6 @@
     <string name="back_button">Back</string>
     <string name="navigate_to_task_completed_button">View Completed Tasks</string>
     <string name="task_entry_title">Add Task</string>
+    <string name="no_completed_task_description">Oops !\nNo completed tasks in the list.\nTry finishing some tasks !</string>
+    <string name="task_completed_title">Completed Tasks</string>
 </resources>
