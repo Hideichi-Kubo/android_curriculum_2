@@ -31,8 +31,10 @@ import com.example.monotodo.ui.theme.MonoTodoTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskCompletedScreen(
+    modifier: Modifier = Modifier,
     navigateToTaskEntry: () -> Unit,
-    modifier: Modifier = Modifier
+    onNavigateUp: () -> Unit,
+    canNavigateBack: Boolean = true
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -41,8 +43,9 @@ fun TaskCompletedScreen(
         topBar = {
             MonoTodoTopAppBar(
                 title = stringResource(R.string.task_completed_title),
-                canNavigateBack = true,
-                scrollBehavior = scrollBehavior
+                canNavigateBack = canNavigateBack,
+                navigateUp = onNavigateUp,
+                scrollBehavior = scrollBehavior,
             )
         },
         floatingActionButton = {
@@ -98,7 +101,8 @@ fun TaskCompletedBody(
 fun TaskCompletedScreenPreview() {
     MonoTodoTheme {
         TaskCompletedScreen(
-            navigateToTaskEntry = {}
+            navigateToTaskEntry = {},
+            onNavigateUp = {}
         )
     }
 }

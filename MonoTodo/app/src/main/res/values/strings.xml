@@ -7,4 +7,7 @@
     <string name="task_entry_title">Add Task</string>
     <string name="no_completed_task_description">Oops !\nNo completed tasks in the list.\nTry finishing some tasks !</string>
     <string name="task_completed_title">Completed Tasks</string>
+    <string name="task_title_req">Task title*</string>
+    <string name="required_fields">*required fields</string>
+    <string name="save_action">Save</string>
 </resources>
