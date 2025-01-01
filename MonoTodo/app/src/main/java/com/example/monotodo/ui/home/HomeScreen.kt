@@ -40,8 +40,8 @@ import com.example.monotodo.ui.theme.MonoTodoTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navigateToTaskEntry: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToTaskEntry: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -95,8 +95,8 @@ fun HomeBody(
         } else {
             TaskList(
                 taskList = taskList,
-                contentPadding = contentPadding,
-                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small))
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
+                contentPadding = contentPadding
             )
         }
     }
@@ -105,8 +105,8 @@ fun HomeBody(
 @Composable
 fun TaskList(
     taskList: List<Task>,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
-    modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier,
