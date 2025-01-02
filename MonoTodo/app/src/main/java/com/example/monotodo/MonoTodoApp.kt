@@ -14,14 +14,17 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.example.monotodo.ui.home.HomeScreen
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.monotodo.ui.navigation.MonoTodoNavHost
 
 @Composable
 fun MonoTodoApp(
+    navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
-    HomeScreen(
-        navigateToTaskEntry = {},
+    MonoTodoNavHost(
+        navController = navController,
         modifier = modifier
     )
 }

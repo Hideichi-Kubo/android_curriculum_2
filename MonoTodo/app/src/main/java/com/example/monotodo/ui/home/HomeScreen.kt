@@ -35,13 +35,20 @@ import androidx.compose.ui.unit.dp
 import com.example.monotodo.MonoTodoTopAppBar
 import com.example.monotodo.R
 import com.example.monotodo.data.Task
+import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
+
+object HomeDestination : NavigationDestination {
+    override val route = "home"
+    override val titleRes = R.string.app_name
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToTaskEntry: () -> Unit
+    navigateToTaskEntry: () -> Unit,
+    navigateToTaskCompleted: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -49,9 +56,10 @@ fun HomeScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MonoTodoTopAppBar(
-                title = stringResource(R.string.app_name),
+                title = stringResource(HomeDestination.titleRes),
                 canNavigateBack = false,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                navigateToTaskCompleted = navigateToTaskCompleted
             )
         },
         floatingActionButton = {

@@ -26,7 +26,13 @@ import com.example.monotodo.MonoTodoTopAppBar
 import com.example.monotodo.R
 import com.example.monotodo.data.Task
 import com.example.monotodo.ui.home.TaskList
+import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
+
+object TaskCompletedDestination : NavigationDestination {
+    override val route = "task_completed"
+    override val titleRes = R.string.task_completed_title
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +48,7 @@ fun TaskCompletedScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             MonoTodoTopAppBar(
-                title = stringResource(R.string.task_completed_title),
+                title = stringResource(TaskCompletedDestination.titleRes),
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp,
                 scrollBehavior = scrollBehavior,
