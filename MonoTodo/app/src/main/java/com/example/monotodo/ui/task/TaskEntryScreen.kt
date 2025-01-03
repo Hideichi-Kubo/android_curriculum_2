@@ -18,7 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.monotodo.MonoTodoTopAppBar
 import com.example.monotodo.R
+import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
+
+object TaskEntryDestination : NavigationDestination {
+    override val route = "task_entry"
+    override val titleRes = R.string.task_entry_title
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -26,12 +32,12 @@ fun TaskEntryScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: TaskEntryViewModel
+    viewModel: TaskEntryViewModel = TaskEntryViewModel()
 ) {
     Scaffold(
         topBar = {
             MonoTodoTopAppBar(
-                title = stringResource(R.string.task_entry_title),
+                title = stringResource(TaskEntryDestination.titleRes),
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp
             )
@@ -47,7 +53,7 @@ fun TaskEntryScreen(
                 taskUiState = viewModel.taskUiState,
                 modifier = Modifier.fillMaxWidth(),
                 onTaskValueChange = viewModel::updateUiState,
-                onSaveClick = {}
+                onSaveClick = navigateBack
             )
         }
     }
