@@ -23,6 +23,9 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,11 +35,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.monotodo.MonoTodoTopAppBar
 import com.example.monotodo.R
 import com.example.monotodo.data.Task
+import com.example.monotodo.ui.AppViewModelProvider
 import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
+import kotlinx.coroutines.launch
 
 object HomeDestination : NavigationDestination {
     override val route = "home"
@@ -48,9 +54,12 @@ object HomeDestination : NavigationDestination {
 fun HomeScreen(
     modifier: Modifier = Modifier,
     navigateToTaskEntry: () -> Unit,
-    navigateToTaskCompleted: () -> Unit
+    navigateToTaskCompleted: () -> Unit,
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val homeUiState by viewModel.homeUiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -76,9 +85,19 @@ fun HomeScreen(
         },
     ) { innerPadding ->
         HomeBody(
-            taskList = listOf(),
+            taskList = homeUiState.itemList,
             modifier = Modifier.fillMaxSize(),
-            contentPadding = innerPadding
+            contentPadding = innerPadding,
+            onDelete = { task ->
+                coroutineScope.launch {
+                    viewModel.deleteTask(task)
+                }
+            },
+            onToggleCompletion = { task, isCompleted ->
+                coroutineScope.launch {
+                    viewModel.toggleTaskCompletion(task, isCompleted)
+                }
+            }
         )
     }
 }
@@ -87,7 +106,9 @@ fun HomeScreen(
 fun HomeBody(
     taskList: List<Task>,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    onDelete: (Task) -> Unit,
+    onToggleCompletion: (Task, Boolean) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -104,7 +125,9 @@ fun HomeBody(
             TaskList(
                 taskList = taskList,
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
-                contentPadding = contentPadding
+                contentPadding = contentPadding,
+                onDelete = onDelete,
+                onToggleCompletion = onToggleCompletion
             )
         }
     }
@@ -115,6 +138,8 @@ fun TaskList(
     taskList: List<Task>,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
+    onDelete: (Task) -> Unit,
+    onToggleCompletion: (Task, Boolean) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
@@ -123,7 +148,9 @@ fun TaskList(
         items(items = taskList, key = { it.id }) { item ->
             TaskCard(
                 task = item,
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_small))
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_small)),
+                onDelete = { onDelete(item) },
+                onToggleCompletion = { onToggleCompletion(item, it) }
             )
         }
     }
@@ -132,7 +159,9 @@ fun TaskList(
 @Composable
 fun TaskCard(
     task: Task,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onDelete: () -> Unit = {},
+    onToggleCompletion: (Boolean) -> Unit = {}
 ) {
     OutlinedCard(
         border = BorderStroke(2.dp, Color.Black),
@@ -142,7 +171,7 @@ fun TaskCard(
             modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large))
         ) {
             IconButton(
-                onClick = {},
+                onClick = onDelete,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(end = dimensionResource(id = R.dimen.padding_small))
@@ -165,7 +194,7 @@ fun TaskCard(
             }
             Switch(
                 checked = task.isCompleted,
-                onCheckedChange = { },
+                onCheckedChange = { isCompleted -> onToggleCompletion(isCompleted) },
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
@@ -176,11 +205,15 @@ fun TaskCard(
 @Composable
 fun HomeBodyPreview() {
     MonoTodoTheme {
-        HomeBody(listOf(
-            Task(0, "Buy Eggs"),
-            Task(1, "Buy Apples"),
-            Task(2, "Buy Eggs")
-        ))
+        HomeBody(
+            taskList = listOf(
+                Task(0, "Buy Eggs"),
+                Task(1, "Buy Apples"),
+                Task(2, "Buy Eggs")
+            ),
+            onDelete = {},
+            onToggleCompletion = { _, _ -> }
+        )
     }
 }
 
@@ -188,7 +221,11 @@ fun HomeBodyPreview() {
 @Composable
 fun HomeBodyEmptyListPreview() {
     MonoTodoTheme {
-        HomeBody(listOf())
+        HomeBody(
+            taskList = listOf(),
+            onDelete = {},
+            onToggleCompletion = { _, _ -> }
+        )
     }
 }
 
