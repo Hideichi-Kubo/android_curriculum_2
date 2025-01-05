@@ -23,13 +23,17 @@ class HomeViewModel(private val tasksRepository: TasksRepository) : ViewModel() 
             initialValue = HomeUiState()
         )
 
-    suspend fun deleteTask(task: Task) {
-        tasksRepository.deleteTask(task)
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            tasksRepository.deleteTask(task)
+        }
     }
 
-    suspend fun toggleTaskCompletion(task: Task, isCompleted: Boolean) {
-        val updatedTask = task.copy(isCompleted = isCompleted)
-        tasksRepository.updateTask(updatedTask)
+    fun toggleTaskCompletion(task: Task, isCompleted: Boolean) {
+        viewModelScope.launch {
+            val updatedTask = task.copy(isCompleted = isCompleted)
+            tasksRepository.updateTask(updatedTask)
+        }
     }
 }
 

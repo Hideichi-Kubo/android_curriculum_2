@@ -12,7 +12,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -23,7 +22,6 @@ import com.example.monotodo.R
 import com.example.monotodo.ui.AppViewModelProvider
 import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
-import kotlinx.coroutines.launch
 
 object TaskEntryDestination : NavigationDestination {
     override val route = "task_entry"
@@ -38,7 +36,6 @@ fun TaskEntryScreen(
     canNavigateBack: Boolean = true,
     viewModel: TaskEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
             MonoTodoTopAppBar(
@@ -59,10 +56,8 @@ fun TaskEntryScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onTaskValueChange = viewModel::updateUiState,
                 onSaveClick = {
-                    coroutineScope.launch {
-                        viewModel.saveTask()
-                        navigateBack()
-                    }
+                    viewModel.saveTask()
+                    navigateBack()
                 }
             )
         }

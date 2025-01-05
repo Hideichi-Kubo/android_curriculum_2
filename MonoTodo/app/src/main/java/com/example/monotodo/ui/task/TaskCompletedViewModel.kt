@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class TaskCompletedViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
     companion object {
@@ -22,13 +23,17 @@ class TaskCompletedViewModel(private val tasksRepository: TasksRepository) : Vie
             initialValue = TaskCompletedUiState()
         )
 
-    suspend fun deleteTask(task: Task) {
-        tasksRepository.deleteTask(task)
+    fun deleteTask(task: Task) {
+        viewModelScope.launch {
+            tasksRepository.deleteTask(task)
+        }
     }
 
-    suspend fun toggleTaskCompletion(task: Task, isCompleted: Boolean) {
-        val updatedTask = task.copy(isCompleted = isCompleted)
-        tasksRepository.updateTask(updatedTask)
+    fun toggleTaskCompletion(task: Task, isCompleted: Boolean) {
+        viewModelScope.launch {
+            val updatedTask = task.copy(isCompleted = isCompleted)
+            tasksRepository.updateTask(updatedTask)
+        }
     }
 }
 

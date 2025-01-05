@@ -4,8 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.monotodo.data.Task
 import com.example.monotodo.data.TasksRepository
+import kotlinx.coroutines.launch
 
 class TaskEntryViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
 
@@ -23,9 +25,11 @@ class TaskEntryViewModel(private val tasksRepository: TasksRepository) : ViewMod
             TaskUiState(taskDetails = taskDetails, isEntryValid = validateInput(taskDetails))
     }
 
-    suspend fun saveTask() {
+    fun saveTask() {
         if (validateInput()) {
-            tasksRepository.insertTask(taskUiState.taskDetails.toTask())
+            viewModelScope.launch {
+                tasksRepository.insertTask(taskUiState.taskDetails.toTask())
+            }
         }
     }
 }

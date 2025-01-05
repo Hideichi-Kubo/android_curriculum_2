@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,7 +31,6 @@ import com.example.monotodo.ui.AppViewModelProvider
 import com.example.monotodo.ui.home.TaskList
 import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
-import kotlinx.coroutines.launch
 
 object TaskCompletedDestination : NavigationDestination {
     override val route = "task_completed"
@@ -50,7 +48,6 @@ fun TaskCompletedScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val taskCompletedUiState = viewModel.taskCompletedUiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -80,14 +77,10 @@ fun TaskCompletedScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = innerPadding,
             onDelete = { task ->
-                coroutineScope.launch {
-                    viewModel.deleteTask(task)
-                }
+                viewModel.deleteTask(task)
             },
             onToggleCompletion = { task, isCompleted ->
-                coroutineScope.launch {
-                    viewModel.toggleTaskCompletion(task, isCompleted)
-                }
+                viewModel.toggleTaskCompletion(task, isCompleted)
             }
         )
     }

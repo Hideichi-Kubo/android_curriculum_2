@@ -25,7 +25,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,7 +41,6 @@ import com.example.monotodo.data.Task
 import com.example.monotodo.ui.AppViewModelProvider
 import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
-import kotlinx.coroutines.launch
 
 object HomeDestination : NavigationDestination {
     override val route = "home"
@@ -59,7 +57,6 @@ fun HomeScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val homeUiState by viewModel.homeUiState.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -89,14 +86,10 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             contentPadding = innerPadding,
             onDelete = { task ->
-                coroutineScope.launch {
-                    viewModel.deleteTask(task)
-                }
+                viewModel.deleteTask(task)
             },
             onToggleCompletion = { task, isCompleted ->
-                coroutineScope.launch {
-                    viewModel.toggleTaskCompletion(task, isCompleted)
-                }
+                viewModel.toggleTaskCompletion(task, isCompleted)
             }
         )
     }
