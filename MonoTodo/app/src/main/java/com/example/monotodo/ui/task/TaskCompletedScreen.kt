@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -22,9 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.monotodo.MonoTodoTopAppBar
 import com.example.monotodo.R
 import com.example.monotodo.data.Task
+import com.example.monotodo.ui.AppViewModelProvider
 import com.example.monotodo.ui.home.TaskList
 import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
@@ -40,9 +43,11 @@ fun TaskCompletedScreen(
     modifier: Modifier = Modifier,
     navigateToTaskEntry: () -> Unit,
     onNavigateUp: () -> Unit,
-    canNavigateBack: Boolean = true
+    canNavigateBack: Boolean = true,
+    viewModel: TaskCompletedViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val taskCompletedUiState = viewModel.taskCompletedUiState.collectAsState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -68,9 +73,15 @@ fun TaskCompletedScreen(
         },
     ) { innerPadding ->
         TaskCompletedBody(
-            taskList = listOf(),
+            taskList = taskCompletedUiState.value.taskList,
             modifier = Modifier.fillMaxSize(),
-            contentPadding = innerPadding
+            contentPadding = innerPadding,
+            onDelete = { task ->
+                viewModel.deleteTask(task)
+            },
+            onToggleCompletion = { task, isCompleted ->
+                viewModel.toggleTaskCompletion(task, isCompleted)
+            }
         )
     }
 }
@@ -79,7 +90,9 @@ fun TaskCompletedScreen(
 fun TaskCompletedBody(
     taskList: List<Task>,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    onDelete: (Task) -> Unit,
+    onToggleCompletion: (Task, Boolean) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -96,7 +109,9 @@ fun TaskCompletedBody(
             TaskList(
                 taskList = taskList,
                 contentPadding = contentPadding,
-                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small))
+                modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
+                onDelete = onDelete,
+                onToggleCompletion = onToggleCompletion
             )
         }
     }
@@ -104,11 +119,16 @@ fun TaskCompletedBody(
 
 @Preview(showBackground = true)
 @Composable
-fun TaskCompletedScreenPreview() {
+fun TaskCompletedBodyPreview() {
     MonoTodoTheme {
-        TaskCompletedScreen(
-            navigateToTaskEntry = {},
-            onNavigateUp = {}
+        TaskCompletedBody(
+            taskList = listOf(
+                Task(0, "Buy Eggs"),
+                Task(1, "Buy Apples"),
+                Task(2, "Buy Eggs")
+            ),
+            onDelete = {},
+            onToggleCompletion = { _, _ -> }
         )
     }
 }

@@ -4,8 +4,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.monotodo.data.Task
+import com.example.monotodo.data.TasksRepository
+import kotlinx.coroutines.launch
 
-class TaskEntryViewModel : ViewModel() {
+class TaskEntryViewModel(private val tasksRepository: TasksRepository) : ViewModel() {
 
     var taskUiState by mutableStateOf(TaskUiState())
         private set
@@ -20,6 +24,14 @@ class TaskEntryViewModel : ViewModel() {
         taskUiState =
             TaskUiState(taskDetails = taskDetails, isEntryValid = validateInput(taskDetails))
     }
+
+    fun saveTask() {
+        if (validateInput()) {
+            viewModelScope.launch {
+                tasksRepository.insertTask(taskUiState.taskDetails.toTask())
+            }
+        }
+    }
 }
 
 data class TaskUiState(
@@ -31,4 +43,10 @@ data class TaskDetails(
     val id: Int = 0,
     val title: String = "",
     val isCompleted: Boolean = false
+)
+
+fun TaskDetails.toTask(): Task = Task(
+    id = id,
+    title = title,
+    isCompleted = isCompleted
 )

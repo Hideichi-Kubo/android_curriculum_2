@@ -16,8 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.monotodo.MonoTodoTopAppBar
 import com.example.monotodo.R
+import com.example.monotodo.ui.AppViewModelProvider
 import com.example.monotodo.ui.navigation.NavigationDestination
 import com.example.monotodo.ui.theme.MonoTodoTheme
 
@@ -32,7 +34,7 @@ fun TaskEntryScreen(
     navigateBack: () -> Unit,
     onNavigateUp: () -> Unit,
     canNavigateBack: Boolean = true,
-    viewModel: TaskEntryViewModel = TaskEntryViewModel()
+    viewModel: TaskEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +55,10 @@ fun TaskEntryScreen(
                 taskUiState = viewModel.taskUiState,
                 modifier = Modifier.fillMaxWidth(),
                 onTaskValueChange = viewModel::updateUiState,
-                onSaveClick = navigateBack
+                onSaveClick = {
+                    viewModel.saveTask()
+                    navigateBack()
+                }
             )
         }
     }
@@ -111,18 +116,6 @@ fun TaskInputForm(
                 modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_medium))
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TaskEntryScreenPreview() {
-    MonoTodoTheme {
-        TaskEntryScreen(
-            navigateBack = {},
-            onNavigateUp = {},
-            viewModel = TaskEntryViewModel()
-        )
     }
 }
 
