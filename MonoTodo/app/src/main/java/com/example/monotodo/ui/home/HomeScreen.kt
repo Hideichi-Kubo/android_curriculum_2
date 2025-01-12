@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -57,6 +58,7 @@ fun HomeScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val homeUiState by viewModel.homeUiState.collectAsState()
+    val homeMeigenUiState by viewModel.homeMeigenUiState.collectAsState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -81,17 +83,77 @@ fun HomeScreen(
             }
         },
     ) { innerPadding ->
-        HomeBody(
-            taskList = homeUiState.itemList,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = innerPadding,
-            onDelete = { task ->
-                viewModel.deleteTask(task)
-            },
-            onToggleCompletion = { task, isCompleted ->
-                viewModel.toggleTaskCompletion(task, isCompleted)
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            HomeMeigenSection(
+                meigenUiState = homeMeigenUiState,
+                modifier = Modifier.weight(1f)
+            )
+            HomeBody(
+                taskList = homeUiState.itemList,
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(0.dp),
+                onDelete = { task ->
+                    viewModel.deleteTask(task)
+                },
+                onToggleCompletion = { task, isCompleted ->
+                    viewModel.toggleTaskCompletion(task, isCompleted)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun HomeMeigenSection(
+    meigenUiState: HomeMeigenUiState,
+    modifier: Modifier = Modifier
+) {
+    when (meigenUiState) {
+        HomeMeigenUiState.Loading -> {
+            Text(
+                text = stringResource(R.string.loading),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
+            )
+        }
+        HomeMeigenUiState.Error -> {
+            Text(
+                text = stringResource(R.string.failed_to_retrieve_quote),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
+            )
+        }
+        is HomeMeigenUiState.Success -> {
+            val meigen = meigenUiState.meigen
+            Column(
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_small))
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = meigen.meigen,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                )
+                Text(
+                    text = meigen.auther,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .align(Alignment.End)
+                )
             }
-        )
+        }
     }
 }
 
