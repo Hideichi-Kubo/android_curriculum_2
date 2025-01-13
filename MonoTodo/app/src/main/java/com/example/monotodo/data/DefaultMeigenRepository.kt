@@ -13,9 +13,7 @@ class DefaultMeigenRepository(
         return try {
             val meigenList = meigenApiService.getRandomMeigen()
 
-            if (meigenList.isNotEmpty()) {
-                meigenList
-            } else {
+            meigenList.ifEmpty {
                 fallbackToLocal()
             }
         } catch (e: Exception) {

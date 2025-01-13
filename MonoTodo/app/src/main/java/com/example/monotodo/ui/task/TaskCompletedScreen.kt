@@ -109,7 +109,7 @@ fun TaskCompletedMeigenSection(
                 text = stringResource(R.string.loading),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_small))
             )
@@ -119,7 +119,7 @@ fun TaskCompletedMeigenSection(
                 text = stringResource(R.string.failed_to_retrieve_quote),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_small))
             )
