@@ -203,7 +203,9 @@ fun TaskList(
         items(items = taskList, key = { it.id }) { item ->
             TaskCard(
                 task = item,
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_small)),
+                modifier = Modifier
+                    .padding(dimensionResource(id = R.dimen.padding_small))
+                    .animateItem(),
                 onDelete = { onDelete(item) },
                 onToggleCompletion = { onToggleCompletion(item, it) }
             )
