@@ -12,11 +12,17 @@ import com.example.monotodo.ui.task.TaskEntryViewModel
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {
-            HomeViewModel(monoTodoApplication().container.tasksRepository)
+            HomeViewModel(
+                monoTodoApplication().container.tasksRepository,
+                monoTodoApplication().container.meigenRepository
+            )
         }
 
         initializer {
-            TaskCompletedViewModel(monoTodoApplication().container.tasksRepository)
+            TaskCompletedViewModel(
+                monoTodoApplication().container.tasksRepository,
+                monoTodoApplication().container.meigenRepository
+            )
         }
 
         initializer {

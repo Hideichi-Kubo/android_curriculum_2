@@ -10,4 +10,32 @@
     <string name="task_title_req">Task title*</string>
     <string name="required_fields">*required fields</string>
     <string name="save_action">Save</string>
+    <string name="loading">Loading...</string>
+    <string name="failed_to_retrieve_quote">Failed to retrieve quote.</string>
+
+    <!-- 名言の取得に失敗した場合に表示するフォールバック用の名言と著者 -->
+    <string name="fallback_meigen_1_text">All our dreams can come true, if we have the courage to pursue them.</string>
+    <string name="fallback_meigen_1_auther">Walt Disney</string>
+
+    <string name="fallback_meigen_2_text">All you need in this life is ignorance and confidence, and then success is sure.</string>
+    <string name="fallback_meigen_2_auther">Mark Twain</string>
+
+    <string name="fallback_meigen_3_text">Do what you feel in your heart to be right – for you’ll be criticized anyway.</string>
+    <string name="fallback_meigen_3_auther">Eleanor Roosevelt</string>
+
+    <string name="fallback_meigen_4_text">Indecision is often worse than wrong action.</string>
+    <string name="fallback_meigen_4_auther">Henry Ford</string>
+
+    <string name="fallback_meigen_5_text">Life is like riding a bicycle. To keep your balance you must keep moving.</string>
+    <string name="fallback_meigen_5_auther">Albert Einstein</string>
+
+    <string name="fallback_meigen_6_text">Success is the ability to go from failure to failure without losing your enthusiasm.</string>
+    <string name="fallback_meigen_6_auther">Winston Churchill</string>
+
+    <string name="fallback_meigen_7_text">Things may come to those who wait, but only the things left by those who hustle.</string>
+    <string name="fallback_meigen_7_auther">Abraham Lincoln</string>
+
+    <string name="fallback_meigen_8_text">You’ll never find a rainbow if you’re looking down.</string>
+    <string name="fallback_meigen_8_auther">Charlie Chaplin</string>
+
 </resources>

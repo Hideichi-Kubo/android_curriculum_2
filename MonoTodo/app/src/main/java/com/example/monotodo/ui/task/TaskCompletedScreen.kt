@@ -3,6 +3,7 @@ package com.example.monotodo.ui.task
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -48,6 +49,7 @@ fun TaskCompletedScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val taskCompletedUiState = viewModel.taskCompletedUiState.collectAsState()
+    val taskCompletedMeigenUiState = viewModel.taskCompletedMeigenUiState.collectAsState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -72,17 +74,77 @@ fun TaskCompletedScreen(
             }
         },
     ) { innerPadding ->
-        TaskCompletedBody(
-            taskList = taskCompletedUiState.value.taskList,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = innerPadding,
-            onDelete = { task ->
-                viewModel.deleteTask(task)
-            },
-            onToggleCompletion = { task, isCompleted ->
-                viewModel.toggleTaskCompletion(task, isCompleted)
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            TaskCompletedMeigenSection(
+                meigenUiState = taskCompletedMeigenUiState.value,
+                modifier = Modifier.weight(1f)
+            )
+            TaskCompletedBody(
+                taskList = taskCompletedUiState.value.taskList,
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(0.dp),
+                onDelete = { task ->
+                    viewModel.deleteTask(task)
+                },
+                onToggleCompletion = { task, isCompleted ->
+                    viewModel.toggleTaskCompletion(task, isCompleted)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun TaskCompletedMeigenSection(
+    meigenUiState: TaskCompletedMeigenUiState,
+    modifier: Modifier = Modifier
+) {
+    when (meigenUiState) {
+        TaskCompletedMeigenUiState.Loading -> {
+            Text(
+                text = stringResource(R.string.loading),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
+            )
+        }
+        TaskCompletedMeigenUiState.Error -> {
+            Text(
+                text = stringResource(R.string.failed_to_retrieve_quote),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
+            )
+        }
+        is TaskCompletedMeigenUiState.Success -> {
+            val meigen = meigenUiState.meigen
+            Column(
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_small))
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = meigen.meigen,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                )
+                Text(
+                    text = meigen.auther,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .align(Alignment.End)
+                )
             }
-        )
+        }
     }
 }
 
