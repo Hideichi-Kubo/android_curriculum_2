@@ -1,10 +1,12 @@
 package com.example.monotodo.ui.home
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,9 +30,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -174,7 +176,9 @@ fun HomeBody(
                 text = stringResource(R.string.no_task_description),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(R.dimen.padding_extra_large))
             )
         } else {
             TaskList(
@@ -182,7 +186,9 @@ fun HomeBody(
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
                 contentPadding = contentPadding,
                 onDelete = onDelete,
-                onToggleCompletion = onToggleCompletion
+                onToggleCompletion = onToggleCompletion,
+                illustrationLightRes = R.drawable.home_illustration_light,
+                illustrationDarkRes = R.drawable.home_illustration_dark
             )
         }
     }
@@ -194,8 +200,13 @@ fun TaskList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     onDelete: (Task) -> Unit,
-    onToggleCompletion: (Task, Boolean) -> Unit
+    onToggleCompletion: (Task, Boolean) -> Unit,
+    illustrationLightRes: Int,
+    illustrationDarkRes: Int
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val illustrationRes = if (isDarkTheme) illustrationDarkRes else illustrationLightRes
+
     LazyColumn(
         modifier = modifier,
         contentPadding = contentPadding
@@ -210,6 +221,20 @@ fun TaskList(
                 onToggleCompletion = { onToggleCompletion(item, it) }
             )
         }
+        item {
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(id = R.dimen.padding_medium))
+            ) {
+                Image(
+                    painter = painterResource(id = illustrationRes),
+                    contentDescription = null,
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.weight(2f))
+            }
+        }
     }
 }
 
@@ -221,7 +246,6 @@ fun TaskCard(
     onToggleCompletion: (Boolean) -> Unit = {}
 ) {
     OutlinedCard(
-        border = BorderStroke(2.dp, Color.Black),
         modifier = modifier
     ) {
         Row(
@@ -252,7 +276,9 @@ fun TaskCard(
             Switch(
                 checked = task.isCompleted,
                 onCheckedChange = { isCompleted -> onToggleCompletion(isCompleted) },
-                modifier = Modifier.align(Alignment.CenterVertically)
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(start = dimensionResource(id = R.dimen.padding_small))
             )
         }
     }

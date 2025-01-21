@@ -165,7 +165,9 @@ fun TaskCompletedBody(
                 text = stringResource(R.string.no_completed_task_description),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(R.dimen.padding_extra_large))
             )
         } else {
             TaskList(
@@ -173,7 +175,9 @@ fun TaskCompletedBody(
                 contentPadding = contentPadding,
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
                 onDelete = onDelete,
-                onToggleCompletion = onToggleCompletion
+                onToggleCompletion = onToggleCompletion,
+                illustrationLightRes = R.drawable.task_completed_illustration_light,
+                illustrationDarkRes = R.drawable.task_completed_illustration_dark
             )
         }
     }
