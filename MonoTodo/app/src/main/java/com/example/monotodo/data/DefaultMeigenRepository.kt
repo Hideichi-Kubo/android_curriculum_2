@@ -10,6 +10,10 @@ class DefaultMeigenRepository(
 ) : MeigenRepository {
 
     override suspend fun getRandomMeigenFromApiOrLocal(): List<Meigen> {
+        if (!isJapanese(context)) {
+            return fallbackToLocal()
+        }
+
         return try {
             val meigenList = meigenApiService.getRandomMeigen()
 
@@ -25,5 +29,10 @@ class DefaultMeigenRepository(
         val localMeigens = LocalMeigenData.getFallbackMeigens(context)
         val randomMeigen = localMeigens.random()
         return listOf(randomMeigen)
+    }
+
+    private fun isJapanese(context: Context): Boolean {
+        val locale = context.resources.configuration.locales[0]
+        return locale.language == "ja"
     }
 }
