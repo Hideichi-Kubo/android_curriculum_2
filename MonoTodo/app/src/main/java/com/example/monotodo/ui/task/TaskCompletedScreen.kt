@@ -175,9 +175,7 @@ fun TaskCompletedBody(
                 contentPadding = contentPadding,
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
                 onDelete = onDelete,
-                onToggleCompletion = onToggleCompletion,
-                illustrationLightRes = R.drawable.task_completed_illustration_light,
-                illustrationDarkRes = R.drawable.task_completed_illustration_dark
+                onToggleCompletion = onToggleCompletion
             )
         }
     }

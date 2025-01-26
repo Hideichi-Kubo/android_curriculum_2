@@ -1,12 +1,9 @@
 package com.example.monotodo.ui.home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -32,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -186,9 +182,7 @@ fun HomeBody(
                 modifier = Modifier.padding(horizontal = dimensionResource(R.dimen.padding_small)),
                 contentPadding = contentPadding,
                 onDelete = onDelete,
-                onToggleCompletion = onToggleCompletion,
-                illustrationLightRes = R.drawable.home_illustration_light,
-                illustrationDarkRes = R.drawable.home_illustration_dark
+                onToggleCompletion = onToggleCompletion
             )
         }
     }
@@ -200,13 +194,8 @@ fun TaskList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
     onDelete: (Task) -> Unit,
-    onToggleCompletion: (Task, Boolean) -> Unit,
-    illustrationLightRes: Int,
-    illustrationDarkRes: Int
+    onToggleCompletion: (Task, Boolean) -> Unit
 ) {
-    val isDarkTheme = isSystemInDarkTheme()
-    val illustrationRes = if (isDarkTheme) illustrationDarkRes else illustrationLightRes
-
     LazyColumn(
         modifier = modifier,
         contentPadding = contentPadding
@@ -220,20 +209,6 @@ fun TaskList(
                 onDelete = { onDelete(item) },
                 onToggleCompletion = { onToggleCompletion(item, it) }
             )
-        }
-        item {
-            Row (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(dimensionResource(id = R.dimen.padding_medium))
-            ) {
-                Image(
-                    painter = painterResource(id = illustrationRes),
-                    contentDescription = null,
-                    modifier = Modifier.weight(1f)
-                )
-                Spacer(modifier = Modifier.weight(2f))
-            }
         }
     }
 }
