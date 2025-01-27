@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MonoTodo</string>
     <string name="delete">Delete</string>
@@ -37,5 +38,4 @@
 
     <string name="fallback_meigen_8_text">You’ll never find a rainbow if you’re looking down.</string>
     <string name="fallback_meigen_8_auther">Charlie Chaplin</string>
-
 </resources>
