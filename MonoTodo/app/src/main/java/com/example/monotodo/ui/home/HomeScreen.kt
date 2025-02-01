@@ -88,7 +88,7 @@ fun HomeScreen(
         ) {
             HomeMeigenSection(
                 meigenUiState = homeMeigenUiState,
-                modifier = Modifier.weight(1f)
+                modifier = modifier
             )
             HomeBody(
                 taskList = homeUiState.itemList,
@@ -118,7 +118,7 @@ fun HomeMeigenSection(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_small))
+                    .padding(dimensionResource(R.dimen.padding_extra_large))
             )
         }
         HomeMeigenUiState.Error -> {
@@ -128,15 +128,15 @@ fun HomeMeigenSection(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_small))
+                    .padding(dimensionResource(R.dimen.padding_extra_large))
             )
         }
         is HomeMeigenUiState.Success -> {
             val meigen = meigenUiState.meigen
             Column(
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_small))
+                modifier = modifier
                     .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
             ) {
                 Text(
                     text = meigen.meigen,
