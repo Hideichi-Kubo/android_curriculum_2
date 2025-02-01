@@ -8,20 +8,31 @@ class DefaultMeigenRepository(
     private val meigenApiService: MeigenApiService,
     private val context: Context
 ) : MeigenRepository {
+    // 一度取得した名言リストをキャッシュし、不要なAPIリクエストを防止する
+    private var cachedMeigenList: List<Meigen>? = null
 
     override suspend fun getRandomMeigenFromApiOrLocal(): List<Meigen> {
+        // キャッシュ済みならば再取得せずにそのまま返す
+        cachedMeigenList?.let { return it }
+
         if (!isJapanese(context)) {
-            return fallbackToLocal()
+            val localMeigenList = fallbackToLocal()
+            cachedMeigenList = localMeigenList
+            return localMeigenList
         }
 
         return try {
-            val meigenList = meigenApiService.getRandomMeigen()
-
-            meigenList.ifEmpty {
+            val apiMeigenList = meigenApiService.getRandomMeigen()
+            val meigenList = apiMeigenList.ifEmpty {
                 fallbackToLocal()
             }
+
+            cachedMeigenList = meigenList
+            meigenList
         } catch (e: Exception) {
-            fallbackToLocal()
+            val localMeigenList = fallbackToLocal()
+            cachedMeigenList = localMeigenList
+            localMeigenList
         }
     }
 
