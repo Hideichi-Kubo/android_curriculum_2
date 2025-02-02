@@ -81,7 +81,7 @@ fun TaskCompletedScreen(
         ) {
             TaskCompletedMeigenSection(
                 meigenUiState = taskCompletedMeigenUiState.value,
-                modifier = Modifier.weight(1f)
+                modifier = modifier
             )
             TaskCompletedBody(
                 taskList = taskCompletedUiState.value.taskList,
@@ -111,7 +111,7 @@ fun TaskCompletedMeigenSection(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_small))
+                    .padding(dimensionResource(R.dimen.padding_extra_large))
             )
         }
         TaskCompletedMeigenUiState.Error -> {
@@ -121,15 +121,15 @@ fun TaskCompletedMeigenSection(
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(dimensionResource(R.dimen.padding_small))
+                    .padding(dimensionResource(R.dimen.padding_extra_large))
             )
         }
         is TaskCompletedMeigenUiState.Success -> {
             val meigen = meigenUiState.meigen
             Column(
-                modifier = Modifier
-                    .padding(dimensionResource(R.dimen.padding_small))
+                modifier = modifier
                     .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
             ) {
                 Text(
                     text = meigen.meigen,
