@@ -23,6 +23,8 @@ kotlinx-coroutines = "1.7.3"
 lifecycleViewModelKtx = "2.8.7"
 lifecycleViewModelSavedState = "2.8.7"
 lifecycleViewModelCompose = "2.8.7"
+# Ktlint
+ktlint = "11.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,3 +64,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 # Room
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+# Ktlint
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

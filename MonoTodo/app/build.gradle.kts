@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     // Room
     alias(libs.plugins.kotlin.ksp)
+    // Kt lint
+    alias(libs.plugins.ktlint)
 }
 
 android {

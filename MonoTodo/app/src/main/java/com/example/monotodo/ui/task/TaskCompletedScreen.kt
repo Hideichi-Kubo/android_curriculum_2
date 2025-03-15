@@ -58,7 +58,7 @@ fun TaskCompletedScreen(
                 title = stringResource(TaskCompletedDestination.titleRes),
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp,
-                scrollBehavior = scrollBehavior,
+                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {
@@ -72,7 +72,7 @@ fun TaskCompletedScreen(
                     contentDescription = stringResource(R.string.task_entry_title)
                 )
             }
-        },
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier

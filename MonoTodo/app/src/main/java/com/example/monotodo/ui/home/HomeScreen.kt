@@ -79,7 +79,7 @@ fun HomeScreen(
                     contentDescription = stringResource(R.string.task_entry_title)
                 )
             }
-        },
+        }
     ) { innerPadding ->
         Column(
             modifier = Modifier

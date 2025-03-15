@@ -1,8 +1,8 @@
 package com.example.monotodo.data
 
 import android.content.Context
-import com.example.monotodo.network.Meigen
 import com.example.monotodo.R
+import com.example.monotodo.network.Meigen
 
 // フォールバック用にローカル名言リストをまとめたobject
 object LocalMeigenData {
