@@ -31,6 +31,7 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
     override val meigenRepository: MeigenRepository by lazy {
         DefaultMeigenRepository(
             meigenApiService = retrofitService,
-            context = context)
+            context = context
+        )
     }
 }

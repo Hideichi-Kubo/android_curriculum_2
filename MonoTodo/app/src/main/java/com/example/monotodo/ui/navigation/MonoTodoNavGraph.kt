@@ -5,9 +5,9 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.example.monotodo.ui.home.HomeDestination
 import com.example.monotodo.ui.home.HomeScreen
 import com.example.monotodo.ui.task.TaskCompletedDestination
@@ -18,7 +18,7 @@ import com.example.monotodo.ui.task.TaskEntryScreen
 @Composable
 fun MonoTodoNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
@@ -34,12 +34,12 @@ fun MonoTodoNavHost(
                 slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(300))
             },
             popEnterTransition = {
-                slideInHorizontally(initialOffsetX = {  -it }, animationSpec = tween(300))
+                slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(300))
             },
             popExitTransition = {
                 slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300))
             }
-            ) {
+        ) {
             HomeScreen(
                 navigateToTaskEntry = { navController.navigate(TaskEntryDestination.route) },
                 navigateToTaskCompleted = { navController.navigate(TaskCompletedDestination.route) }
