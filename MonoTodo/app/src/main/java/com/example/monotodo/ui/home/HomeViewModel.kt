@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.monotodo.data.MeigenRepository
 import com.example.monotodo.data.Task
 import com.example.monotodo.data.TasksRepository
+import com.example.monotodo.data.UserPreferencesRepository
 import com.example.monotodo.network.Meigen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val tasksRepository: TasksRepository,
-    private val meigenRepository: MeigenRepository
+    private val meigenRepository: MeigenRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     companion object {
@@ -33,6 +35,15 @@ class HomeViewModel(
 
     private val _homeMeigenUiState = MutableStateFlow<HomeMeigenUiState>(HomeMeigenUiState.Loading)
     val homeMeigenUiState: StateFlow<HomeMeigenUiState> = _homeMeigenUiState.asStateFlow()
+
+    val homePreferencesUiState: StateFlow<HomePreferencesUiState> =
+        userPreferencesRepository.isMeigenDisplayEnabled.map { isMeigenDisplayEnabled ->
+            HomePreferencesUiState(isMeigenDisplayEnabled)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = HomePreferencesUiState()
+        )
 
     init {
         fetchRandomMeigen()
@@ -63,6 +74,12 @@ class HomeViewModel(
             }
         }
     }
+
+    fun toggleMeigenDisplayPreference(isMeigenDisplayEnabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setMeigenDisplayEnabled(!isMeigenDisplayEnabled)
+        }
+    }
 }
 
 data class HomeUiState(
@@ -74,3 +91,7 @@ sealed interface HomeMeigenUiState {
     data class Success(val meigen: Meigen) : HomeMeigenUiState
     object Error : HomeMeigenUiState
 }
+
+data class HomePreferencesUiState(
+    val isMeigenDisplayEnabled: Boolean = true
+)

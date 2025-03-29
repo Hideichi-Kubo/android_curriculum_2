@@ -50,6 +50,7 @@ fun TaskCompletedScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val taskCompletedUiState = viewModel.taskCompletedUiState.collectAsState()
     val taskCompletedMeigenUiState = viewModel.taskCompletedMeigenUiState.collectAsState()
+    val taskCompletedPreferencesUiState = viewModel.taskCompletedPreferencesUiState.collectAsState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -58,7 +59,8 @@ fun TaskCompletedScreen(
                 title = stringResource(TaskCompletedDestination.titleRes),
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                onTitleClick = { viewModel.toggleMeigenDisplayPreference(taskCompletedPreferencesUiState.value.isMeigenDisplayEnabled) }
             )
         },
         floatingActionButton = {
@@ -79,10 +81,12 @@ fun TaskCompletedScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            TaskCompletedMeigenSection(
-                meigenUiState = taskCompletedMeigenUiState.value,
-                modifier = modifier
-            )
+            if (taskCompletedPreferencesUiState.value.isMeigenDisplayEnabled) {
+                TaskCompletedMeigenSection(
+                    meigenUiState = taskCompletedMeigenUiState.value,
+                    modifier = modifier
+                )
+            }
             TaskCompletedBody(
                 taskList = taskCompletedUiState.value.taskList,
                 modifier = Modifier.weight(1f),

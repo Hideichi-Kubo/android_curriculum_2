@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.monotodo.data.MeigenRepository
 import com.example.monotodo.data.Task
 import com.example.monotodo.data.TasksRepository
+import com.example.monotodo.data.UserPreferencesRepository
 import com.example.monotodo.network.Meigen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class TaskCompletedViewModel(
     private val tasksRepository: TasksRepository,
-    private val meigenRepository: MeigenRepository
+    private val meigenRepository: MeigenRepository,
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     companion object {
@@ -33,6 +35,15 @@ class TaskCompletedViewModel(
 
     private val _taskCompletedMeigenUiState = MutableStateFlow<TaskCompletedMeigenUiState>(TaskCompletedMeigenUiState.Loading)
     val taskCompletedMeigenUiState: StateFlow<TaskCompletedMeigenUiState> = _taskCompletedMeigenUiState.asStateFlow()
+
+    val taskCompletedPreferencesUiState: StateFlow<TaskCompletedPreferencesUiState> =
+        userPreferencesRepository.isMeigenDisplayEnabled.map { isMeigenDisplayEnabled ->
+            TaskCompletedPreferencesUiState(isMeigenDisplayEnabled)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TaskCompletedViewModel.TIMEOUT_MILLIS),
+            initialValue = TaskCompletedPreferencesUiState()
+        )
 
     init {
         fetchRandomMeigen()
@@ -63,6 +74,12 @@ class TaskCompletedViewModel(
             }
         }
     }
+
+    fun toggleMeigenDisplayPreference(isMeigenDisplayEnabled: Boolean) {
+        viewModelScope.launch {
+            userPreferencesRepository.setMeigenDisplayEnabled(!isMeigenDisplayEnabled)
+        }
+    }
 }
 
 data class TaskCompletedUiState(
@@ -74,3 +91,7 @@ sealed interface TaskCompletedMeigenUiState {
     data class Success(val meigen: Meigen) : TaskCompletedMeigenUiState
     object Error : TaskCompletedMeigenUiState
 }
+
+data class TaskCompletedPreferencesUiState(
+    val isMeigenDisplayEnabled: Boolean = true
+)
