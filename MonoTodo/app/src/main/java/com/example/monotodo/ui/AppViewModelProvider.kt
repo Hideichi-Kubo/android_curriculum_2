@@ -14,14 +14,16 @@ object AppViewModelProvider {
         initializer {
             HomeViewModel(
                 monoTodoApplication().container.tasksRepository,
-                monoTodoApplication().container.meigenRepository
+                monoTodoApplication().container.meigenRepository,
+                monoTodoApplication().container.userPreferencesRepository
             )
         }
 
         initializer {
             TaskCompletedViewModel(
                 monoTodoApplication().container.tasksRepository,
-                monoTodoApplication().container.meigenRepository
+                monoTodoApplication().container.meigenRepository,
+                monoTodoApplication().container.userPreferencesRepository
             )
         }
 

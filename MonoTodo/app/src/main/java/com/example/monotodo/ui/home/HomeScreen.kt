@@ -57,6 +57,7 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val homeUiState by viewModel.homeUiState.collectAsState()
     val homeMeigenUiState by viewModel.homeMeigenUiState.collectAsState()
+    val homePreferencesUiState by viewModel.homePreferencesUiState.collectAsState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -65,7 +66,8 @@ fun HomeScreen(
                 title = stringResource(HomeDestination.titleRes),
                 canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
-                navigateToTaskCompleted = navigateToTaskCompleted
+                navigateToTaskCompleted = navigateToTaskCompleted,
+                onTitleClick = { viewModel.toggleMeigenDisplayPreference(homePreferencesUiState.isMeigenDisplayEnabled) }
             )
         },
         floatingActionButton = {
@@ -86,10 +88,12 @@ fun HomeScreen(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            HomeMeigenSection(
-                meigenUiState = homeMeigenUiState,
-                modifier = modifier
-            )
+            if (homePreferencesUiState.isMeigenDisplayEnabled) {
+                HomeMeigenSection(
+                    meigenUiState = homeMeigenUiState,
+                    modifier = modifier
+                )
+            }
             HomeBody(
                 taskList = homeUiState.itemList,
                 modifier = Modifier.weight(1f),

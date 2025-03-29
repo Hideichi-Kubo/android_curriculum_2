@@ -2,6 +2,7 @@
 
 package com.example.monotodo
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
@@ -36,10 +37,16 @@ fun MonoTodoTopAppBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigateUp: () -> Unit = {},
-    navigateToTaskCompleted: () -> Unit = {}
+    navigateToTaskCompleted: () -> Unit = {},
+    onTitleClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(title) },
+        title = {
+            Text(
+                text = title,
+                modifier = Modifier.clickable { onTitleClick() }
+            )
+        },
         modifier = modifier,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
